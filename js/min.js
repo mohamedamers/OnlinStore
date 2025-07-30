@@ -49,7 +49,7 @@ fetch("products.json")
         allMatchingButtons.forEach((btn) => {
           btn.classList.add("active");
           btn.innerHTML = `
-              <i class="fa-solid fa-cart-shopping"></i> Item in Cart
+              <i class="fa-solid fa-cart-shopping"></i>Item in Cart
           `;
         });
       });
