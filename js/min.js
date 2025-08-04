@@ -1,16 +1,15 @@
-    // Spinner
-    var spinner = function () {
-        setTimeout(function () {
-            if ($('#spinner').length > 0) {
-                $('#spinner').removeClass('show');
-            }
-        }, 1);
-    };
-    spinner();
-    
-    
-    // Initiate the wowjs
-    new WOW().init();
+// Spinner
+var spinner = function () {
+  setTimeout(function () {
+    if ($("#spinner").length > 0) {
+      $("#spinner").removeClass("show");
+    }
+  }, 1);
+};
+spinner();
+
+// Initiate the wowjs
+new WOW().init();
 
 let category_nav_list = document.querySelector(".category_nav_list");
 
@@ -71,6 +70,20 @@ function updateCart() {
 
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+  const checkout_items = document.getElementById("checkout_items");
+
+  let items_input = document.getElementById("items2");
+  let total_price_input = document.getElementById("total_price");
+  let count_items_input = document.getElementById("count_items");
+
+  if (checkout_items) {
+    checkout_items.innerHTML = "";
+
+    items_input.value = "";
+    total_price_input.value = "";
+    count_items_input.value = "";
+  }
+
   var total_price = 0;
   var total_count = 0;
 
@@ -81,6 +94,22 @@ function updateCart() {
     total_price += total_Price_item;
     total_count += item.quantity;
 
+    // checkout input
+
+  if (checkout_items) {
+      items_input.value +=
+        item.name +
+        " --- " +
+        "price : " +
+        total_Price_item +
+        " --- " +
+        "count : " +
+        item.quantity +
+        "\n";
+
+      total_price_input.value = total_price + 20;
+      count_items_input.value = total_count;
+    }
     cartItemsContainer.innerHTML += `
                 <div class="item_cart">
                 <img src="${item.img}" alt="">
@@ -96,6 +125,30 @@ function updateCart() {
                 <button class="delete_item" data-index="${index}"><i class="fa-solid fa-trash-can"></i></button>
             </div> 
     `;
+
+    if (checkout_items) {
+      checkout_items.innerHTML += `
+                              <div class="item_cart">
+                            <div class="image_name">
+                                <img src="${item.img}" alt="">
+
+                                <div class="content">
+                                    <h4>${item.name}</h4>
+                                    <p class="price_cart">$${total_Price_item}</p>
+                                    <div class="quantity_control">
+                                        <button class="decrase_quantity" data-index=${index}>-</button>
+                                        <span class="quantity">${item.quantity}</span>
+                                        <button class="incrase_quantity" data-index=${index}>+</button>
+                                    </div> 
+                                </div> 
+                            </div>
+
+                            <button class="delete_item" data-index="${index}"><i class="fa-solid fa-trash-can"></i></button>
+
+                        </div> 
+      
+      `;
+    }
   });
 
   const price_cart_total = document.querySelector(".price_cart_toral");
@@ -109,6 +162,14 @@ function updateCart() {
   count_item_cart.innerHTML = total_count;
 
   count_item_header.innerHTML = total_count;
+
+  if (checkout_items) {
+    const subtotal_checkout = document.querySelector(".subtotal_checkout");
+    const total_checkout = document.querySelector(".total_checkout");
+
+    subtotal_checkout.innerHTML = `$ ${total_price}`;
+    total_checkout.innerHTML = `$ ${total_price + 20}`;
+  }
 
   const increaseButtons = document.querySelectorAll(".incrase_quantity");
   const decraseButtons = document.querySelectorAll(".decrase_quantity");
